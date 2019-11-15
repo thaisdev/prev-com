@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title class="ion-text-center">
+    <ion-title>
       PrevCom
     </ion-title>
   </ion-toolbar>
@@ -8,43 +8,44 @@
 
 <ion-content>
   <div class="ion-padding">
-   
-    <ion-item>
-      <ion-label position="floating">Idade</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Nível de risco</ion-label>
-      <ion-select placeholder="Selecione">
-        <ion-select-option value="1">Baixo</ion-select-option>
-        <ion-select-option value="2">Alto</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Renda complementar desejada</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-list>
-      <ion-radio-group>
-        <ion-list-header>
-          <ion-label>Sexo</ion-label>
-        </ion-list-header>
-    
-        <ion-item>
-          <ion-label>Feminino</ion-label>
-          <ion-radio slot="end" value="f"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>Masculino</ion-label>
-          <ion-radio slot="end" value="m"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
-    </ion-list>
+    <form (ngSubmit)="calcular(form)" #form="ngForm">
+      <ion-item>
+        <ion-label position="floating">Idade</ion-label>
+        <ion-input [(ngModel)]="formData.idade" name="idade" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Nível de risco</ion-label>
+        <ion-select placeholder="Selecione" [(ngModel)]="formData.risco" name="risco" required>
+          <ion-select-option value="1">Baixo</ion-select-option>
+          <ion-select-option value="2">Alto</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Renda complementar desejada</ion-label>
+        <ion-input [(ngModel)]="formData.renda" name="renda" required></ion-input>
+      </ion-item>
+      <ion-list>
+        <ion-radio-group [(ngModel)]="formData.sexo" name="sexo" required>
+          <ion-list-header>
+            <ion-label>Sexo</ion-label>
+          </ion-list-header>
+      
+          <ion-item>
+            <ion-label>Feminino</ion-label>
+            <ion-radio slot="end" value="f"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>Masculino</ion-label>
+            <ion-radio slot="end" value="m"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
 
-    <div class="ion-padding-top">
-      <ion-button expand="block">
-        Calcular
-      </ion-button>
-    </div>
+      <div class="ion-padding-top">
+        <ion-button expand="block" type="submit">
+          Calcular
+        </ion-button>
+      </div>
+   </form>    
   </div>
 </ion-content>
