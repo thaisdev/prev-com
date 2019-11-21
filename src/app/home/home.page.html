@@ -16,13 +16,13 @@
       <ion-item>
         <ion-label>Nível de risco</ion-label>
         <ion-select placeholder="Selecione" [(ngModel)]="formData.risco" name="risco" required>
-          <ion-select-option value="1">Baixo</ion-select-option>
-          <ion-select-option value="2">Alto</ion-select-option>
+          <ion-select-option value="1">Renda Fixa</ion-select-option>
+          <ion-select-option value="2">Renda Variável</ion-select-option>
         </ion-select>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Renda complementar desejada</ion-label>
-        <ion-input [(ngModel)]="formData.renda" name="renda" required></ion-input>
+        <ion-input [(ngModel)]="formData.aposentadoriaDesejada" name="aposentadoriaDesejada" required></ion-input>
       </ion-item>
       <ion-list>
         <ion-radio-group [(ngModel)]="formData.sexo" name="sexo" required>
