@@ -33,10 +33,7 @@ export class HomePage {
       let renda: number = parseFloat(this.formData.aposentadoriaDesejada)
       let valorAcumulado = this.PV(taxa, mesesRecebimento, renda);
       let mesesPagamento: number = (this.idadeAposentadoria[this.formData.sexo] - this.formData.idade) * 12;
-      let valorContribuicaoMensal = this.PGTO(valorAcumulado, mesesPagamento, taxa);
-      console.log(valorContribuicaoMensal);
-      // let tempoParaPagarMeses: number = (this.idadeAposentadoria[this.formData.sexo] -    this.formData.idade)*12;
-      // let valorContribuicaoMensal: number = montanteInvestimento / tempoParaPagarMeses;
+      let valorContribuicaoMensal = (this.PMT(taxa, mesesPagamento, 0, valorAcumulado, 0)*-1)/(1-0.02);
       this.presentAlert('Resultado', 'Contribuição mensal', 'Você deve poupar R$'+valorContribuicaoMensal.toFixed(2)+' ao mês');
     }
   }
@@ -46,22 +43,21 @@ export class HomePage {
     return pmt / rate * (1 - Math.pow(1 + rate, -nper));
   }
 
-  private PGTO(valor: number, prestacoes: number, juros: number)
-    {
-        let E: number = 1;
-        let cont: number = 1;
-        juros = juros / 100;
+  private PMT(rate: number, nper: number, pv: number, fv: number, type: number) {
+    if (!fv) fv = 0;
+    if (!type) type = 0;
 
-        for (let k = 1; k <= prestacoes; k++)
-        {
-            cont = cont * (1 + juros);
-            E = E + cont;
-        }
-        E = E - cont;
-        valor = valor * cont;
+    if (rate == 0) return -(pv + fv)/nper;
 
-        return valor /E;
-    }
+    var pvif = Math.pow(1 + rate, nper);
+    var pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+
+    if (type == 1) {
+        pmt /= (1 + rate);
+    };
+
+    return pmt;
+  }
 
   async presentAlert(header, title, msg) {
     const alert = await this.alertController.create({
