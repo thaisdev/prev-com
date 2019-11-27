@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 
 @Component({
@@ -8,8 +8,6 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
-  public formData: any = {};
 
   private expectativaVida: any = {
     'f': 22.5,
@@ -24,17 +22,32 @@ export class HomePage {
     '2': 0.1036
   };
 
-  constructor(private alertController: AlertController) {}
+  public form: FormGroup = new FormGroup({
+    idade: new FormControl('', [Validators.required]),
+    risco: new FormControl('', [Validators.required]),
+    aposentadoriaDesejada: new FormControl('', [Validators.required]),
+    sexo: new FormControl('', [Validators.required])
+  });
 
-  calcular(form: NgForm) {
-    if (form.valid) {
-      let taxa: number = (Math.pow((this.rendimento[this.formData.risco]+1), 1/12)-1);
-      let mesesRecebimento: number = this.expectativaVida[this.formData.sexo]*12;
-      let renda: number = parseFloat(this.formData.aposentadoriaDesejada)
+  public showErrors: boolean = false;
+
+  constructor(private alertController: AlertController) {
+
+  }
+
+  public calcular() {
+    this.showErrors = false;
+    if (this.form.valid) {
+      let taxa: number = (Math.pow((this.rendimento[this.form.value.risco]+1), 1/12)-1);
+      let mesesRecebimento: number = this.expectativaVida[this.form.value.sexo]*12;
+      let renda: number = parseFloat(this.form.value.aposentadoriaDesejada.replace('.', '').replace(',', '.'));
       let valorAcumulado = this.PV(taxa, mesesRecebimento, renda);
-      let mesesPagamento: number = (this.idadeAposentadoria[this.formData.sexo] - this.formData.idade) * 12;
+      let mesesPagamento: number = (this.idadeAposentadoria[this.form.value.sexo] - this.form.value.idade) * 12;
       let valorContribuicaoMensal = (this.PMT(taxa, mesesPagamento, 0, valorAcumulado, 0)*-1)/(1-0.02);
-      this.presentAlert('Resultado', 'Contribuição mensal', 'Você deve poupar R$'+valorContribuicaoMensal.toFixed(2)+' ao mês');
+      this.presentAlert('Resultado', 'Você deve poupar R$'+valorContribuicaoMensal.toFixed(2)+' ao mês');
+    } else {
+      this.showErrors = true;
+      this.presentAlert('Atenção', 'Preencha corretamente todos os campos!');
     }
   }
 
@@ -59,15 +72,24 @@ export class HomePage {
     return pmt;
   }
 
-  async presentAlert(header, title, msg) {
+  async presentAlert(title, msg) {
     const alert = await this.alertController.create({
-      header: header,
-      subHeader: title,
+      header: title,
       message: msg,
       buttons: ['OK']
     });
 
     await alert.present();
+  }
+
+  public limpar() {
+    this.showErrors = false;
+    this.form.reset({
+      idade: '',
+      risco: '',
+      aposentadoriaDesejada: '',
+      sexo: ''
+    });
   }
 
 }

@@ -8,26 +8,29 @@
 
 <ion-content>
   <div class="ion-padding">
-    <form (ngSubmit)="calcular(form)" #form="ngForm">
-      <ion-item>
+    <form (ngSubmit)="calcular()" [formGroup]="form">
+      <ion-item class="ion-margin-bottom" [ngClass]="{'ion-pristine ion-invalid ion-touched' : showErrors && form.controls.idade.invalid}">
         <ion-label position="floating">Idade</ion-label>
-        <ion-input [(ngModel)]="formData.idade" name="idade" required></ion-input>
+        <ion-input formControlName="idade" type="number"></ion-input>
       </ion-item>
-      <ion-item>
+      <span class="error-msg" *ngIf="showErrors && form.controls.idade.invalid">Campo obrigatório</span>
+      <ion-item [ngClass]="{'ion-pristine ion-invalid ion-touched' : showErrors && form.controls.risco.invalid}">
         <ion-label>Nível de risco</ion-label>
-        <ion-select placeholder="Selecione" [(ngModel)]="formData.risco" name="risco" required>
+        <ion-select placeholder="Selecione" formControlName="risco">
           <ion-select-option value="1">Renda Fixa</ion-select-option>
           <ion-select-option value="2">Renda Variável</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-item>
-        <ion-label position="floating">Renda complementar desejada</ion-label>
-        <ion-input [(ngModel)]="formData.aposentadoriaDesejada" name="aposentadoriaDesejada" required></ion-input>
+      <span class="error-msg" *ngIf="showErrors && form.controls.risco.invalid">Campo obrigatório</span>
+      <ion-item [ngClass]="{'ion-pristine ion-invalid ion-touched' : showErrors && form.controls.aposentadoriaDesejada.invalid}">
+        <ion-label position="floating">Renda complementar desejada (R$)</ion-label>
+        <ion-input formControlName="aposentadoriaDesejada" [brmasker]="{money: true, thousand: '.',  decimalCaracter: ',', decimal: '2'}" type="text"></ion-input>
       </ion-item>
+      <span class="error-msg" *ngIf="showErrors && form.controls.aposentadoriaDesejada.invalid">Campo obrigatório</span>
       <ion-list>
-        <ion-radio-group [(ngModel)]="formData.sexo" name="sexo" required>
+        <ion-radio-group formControlName="sexo">
           <ion-list-header>
-            <ion-label>Sexo</ion-label>
+            <ion-label [ngClass]="{'list-header-danger' : showErrors && form.controls.sexo.invalid}">Sexo</ion-label>
           </ion-list-header>
       
           <ion-item>
@@ -40,10 +43,14 @@
           </ion-item>
         </ion-radio-group>
       </ion-list>
+      <span class="error-msg" *ngIf="showErrors && form.controls.sexo.invalid">Campo obrigatório</span>
 
       <div class="ion-padding-top">
         <ion-button expand="block" type="submit">
           Calcular
+        </ion-button>
+        <ion-button expand="block" type="button" fill="outline" (click)="limpar()">
+          Limpar
         </ion-button>
       </div>
    </form>    
