@@ -23,7 +23,7 @@ export class HomePage {
   };
 
   public form: FormGroup = new FormGroup({
-    idade: new FormControl('', [Validators.required]),
+    idade: new FormControl('', [Validators.required, Validators.min(1)]),
     risco: new FormControl('', [Validators.required]),
     aposentadoriaDesejada: new FormControl('', [Validators.required]),
     sexo: new FormControl('', [Validators.required])
@@ -35,8 +35,20 @@ export class HomePage {
 
   }
 
+  private validarIdade() {
+    if (this.form.value && this.form.value.sexo) {
+      this.form.get('idade').setValidators([
+        Validators.required, 
+        Validators.min(1),
+        Validators.max(this.idadeAposentadoria[this.form.value.sexo])
+      ]);
+      this.form.get('idade').updateValueAndValidity();
+    }
+  }
+
   public calcular() {
     this.showErrors = false;
+    this.validarIdade();
     if (this.form.valid) {
       let taxa: number = (Math.pow((this.rendimento[this.form.value.risco]+1), 1/12)-1);
       let mesesRecebimento: number = this.expectativaVida[this.form.value.sexo]*12;
@@ -44,7 +56,7 @@ export class HomePage {
       let valorAcumulado = this.PV(taxa, mesesRecebimento, renda);
       let mesesPagamento: number = (this.idadeAposentadoria[this.form.value.sexo] - this.form.value.idade) * 12;
       let valorContribuicaoMensal = (this.PMT(taxa, mesesPagamento, 0, valorAcumulado, 0)*-1)/(1-0.02);
-      this.presentAlert('Resultado', 'Você deve poupar R$'+valorContribuicaoMensal.toFixed(2)+' ao mês');
+      this.presentAlert('Resultado', 'Você deve poupar R$ '+valorContribuicaoMensal.toFixed(2)+' ao mês');
     } else {
       this.showErrors = true;
       this.presentAlert('Atenção', 'Preencha corretamente todos os campos!');
@@ -84,6 +96,7 @@ export class HomePage {
 
   public limpar() {
     this.showErrors = false;
+    this.form.get('idade').setValidators([Validators.required, Validators.min(1)]);
     this.form.reset({
       idade: '',
       risco: '',

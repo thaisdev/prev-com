@@ -13,7 +13,15 @@
         <ion-label position="floating">Idade</ion-label>
         <ion-input formControlName="idade" type="number"></ion-input>
       </ion-item>
-      <span class="error-msg" *ngIf="showErrors && form.controls.idade.invalid">Campo obrigatório</span>
+      <span class="error-msg" *ngIf="showErrors && form.controls.idade.invalid && form.controls.idade.errors.required">
+        Campo obrigatório
+      </span>
+      <span class="error-msg" *ngIf="showErrors && form.controls.idade.invalid && form.controls.idade.errors.max">
+        Idade máxima permitida: {{form.controls.idade.errors.max.max}}
+      </span>
+      <span class="error-msg" *ngIf="showErrors && form.controls.idade.invalid && form.controls.idade.errors.min">
+        Idade mínima permitida: {{form.controls.idade.errors.min.min}}
+      </span>
       <ion-item [ngClass]="{'ion-pristine ion-invalid ion-touched' : showErrors && form.controls.risco.invalid}">
         <ion-label>Nível de risco</ion-label>
         <ion-select placeholder="Selecione" formControlName="risco">
