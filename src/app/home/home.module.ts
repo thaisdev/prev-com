@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -22,6 +22,9 @@ import { BrMaskerModule } from 'br-mask';
     ]),
     BrMaskerModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  providers: [
+    CurrencyPipe
+  ]
 })
 export class HomePageModule {}
