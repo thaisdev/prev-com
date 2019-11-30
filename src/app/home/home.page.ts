@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,8 @@ export class HomePage {
 
   public showErrors: boolean = false;
 
-  constructor(private alertController: AlertController) {
+  constructor(private alertController: AlertController,
+    private cp: CurrencyPipe) {
 
   }
 
@@ -56,7 +58,13 @@ export class HomePage {
       let valorAcumulado = this.PV(taxa, mesesRecebimento, renda);
       let mesesPagamento: number = (this.idadeAposentadoria[this.form.value.sexo] - this.form.value.idade) * 12;
       let valorContribuicaoMensal = (this.PMT(taxa, mesesPagamento, 0, valorAcumulado, 0)*-1)/(1-0.02);
-      this.presentAlert('Resultado', 'Você deve poupar R$ '+valorContribuicaoMensal.toFixed(2)+' ao mês');
+      this.presentAlert('Resultado', 
+        'Você deve poupar '+
+        this.cp.transform(valorContribuicaoMensal, 'BRL', true, '1.0-2')+
+        ' ao mês até os '+
+        this.idadeAposentadoria[this.form.value.sexo]+
+        ' anos de idade.'
+      );
     } else {
       this.showErrors = true;
       this.presentAlert('Atenção', 'Preencha corretamente todos os campos!');
