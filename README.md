@@ -23,4 +23,4 @@ O objetivo do aplicativo é simular com base na idade atual, sexo, renda complem
 * No campo Renda complementar desejada (R$), insira o valor que você deseja receber ao mês como uma aposentadoria complementar;
 * No campo Sexo, selecione o seu sexo para que o algoritmo escolha a idade de aposentadoria e expectativa de vida correspondente;
 * Clique no botão Calcular, um alerta será exibido com o resultado;
-* Se quiser tentar novamente insirindo outros valores, basta clicar no botão Limpar e repetir o mesmo processo.
+* Se quiser tentar novamente inserindo outros valores, basta clicar no botão Limpar e repetir o mesmo processo.
